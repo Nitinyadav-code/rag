@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal RAG System - NTRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 384px;
+            }
+        }
+        .flow-arrow-h {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 12px solid #ef5675;
+        }
+        .flow-arrow-v {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 12px solid #ef5675;
+        }
+    </style>
+</head>
+<body class="bg-gray-50" style="background-color: #f0f2f5;">
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold" style="color: #003f5c;">Multimodal RAG System for Unified Intelligence</h1>
+            <p class="text-lg mt-2 text-gray-600">A Solution for the National Technical Research Organisation (NTRO)</p>
+        </header>
+
+        <section id="challenge" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" style="color: #003f5c;">The Challenge: Siloed & Unstructured Data</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-10">
+                NTRO handles a vast array of data formats daily. Traditional search methods fall short, creating information silos that hinder comprehensive analysis and slow down intelligence gathering. The core problem is the inability to perform unified semantic searches across text, image, and audio data.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4" style="border-color: #7a5195;">
+                    <div class="text-5xl mb-2">📄</div>
+                    <h3 class="text-xl font-semibold" style="color: #7a5195;">Diverse Document Types</h3>
+                    <p class="text-gray-600 mt-2">Critical information is locked away in PDFs, DOCX files, and free-form text notes.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4" style="border-color: #ef5675;">
+                    <div class="text-5xl mb-2">🖼️</div>
+                    <h3 class="text-xl font-semibold" style="color: #ef5675;">Visual & Audio Data</h3>
+                    <p class="text-gray-600 mt-2">Images, screenshots, and recorded calls contain vital context that text-only search misses.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4" style="border-color: #ffa600;">
+                    <div class="text-5xl mb-2">🔎</div>
+                    <h3 class="text-xl font-semibold" style="color: #ffa600;">Inefficient Search</h3>
+                    <p class="text-gray-600 mt-2">Separate search tools for different formats lead to wasted time and incomplete results.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pipeline" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-12" style="color: #003f5c;">The Solution: A Unified RAG Pipeline</h2>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-4">
+                    
+                    <div class="flex-1 text-center flex flex-col items-center">
+                        <div class="p-4 rounded-full mb-2" style="background-color: #7a519520;">
+                            <span class="text-4xl">📥</span>
+                        </div>
+                        <h3 class="text-lg font-bold" style="color: #7a5195;">1. Ingestion</h3>
+                        <p class="text-sm text-gray-600">System accepts DOC, PDF, images, and audio files.</p>
+                    </div>
+
+                    <div class="flex items-center justify-center h-16 w-full md:w-16 md:h-auto">
+                        <div class="w-full h-1 md:w-16 md:h-1" style="background-color: #ef5675;"></div>
+                        <div class="hidden md:block flow-arrow-h"></div>
+                        <div class="md:hidden flow-arrow-v"></div>
+                    </div>
+
+                    <div class="flex-1 text-center flex flex-col items-center">
+                        <div class="p-4 rounded-full mb-2" style="background-color: #bc509020;">
+                             <span class="text-4xl">⚙️</span>
+                        </div>
+                        <h3 class="text-lg font-bold" style="color: #bc5090;">2. Processing</h3>
+                        <p class="text-sm text-gray-600">Text is extracted, audio is transcribed, and content is converted to embeddings.</p>
+                    </div>
+
+                     <div class="flex items-center justify-center h-16 w-full md:w-16 md:h-auto">
+                        <div class="w-full h-1 md:w-16 md:h-1" style="background-color: #ef5675;"></div>
+                        <div class="hidden md:block flow-arrow-h"></div>
+                        <div class="md:hidden flow-arrow-v"></div>
+                    </div>
+
+                    <div class="flex-1 text-center flex flex-col items-center">
+                        <div class="p-4 rounded-full mb-2" style="background-color: #ff764a20;">
+                            <span class="text-4xl">🗂️</span>
+                        </div>
+                        <h3 class="text-lg font-bold" style="color: #ff764a;">3. Indexing</h3>
+                        <p class="text-sm text-gray-600">All data embeddings are stored in a unified vector space for semantic search.</p>
+                    </div>
+
+                     <div class="flex items-center justify-center h-16 w-full md:w-16 md:h-auto">
+                        <div class="w-full h-1 md:w-16 md:h-1" style="background-color: #ef5675;"></div>
+                        <div class="hidden md:block flow-arrow-h"></div>
+                        <div class="md:hidden flow-arrow-v"></div>
+                    </div>
+
+                    <div class="flex-1 text-center flex flex-col items-center">
+                        <div class="p-4 rounded-full mb-2" style="background-color: #ffa60020;">
+                           <span class="text-4xl">💡</span>
+                        </div>
+                        <h3 class="text-lg font-bold" style="color: #ffa600;">4. Retrieval & Generation</h3>
+                        <p class="text-sm text-gray-600">LLM retrieves relevant multimodal data and generates a grounded, cited answer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="data-analysis" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" style="color: #003f5c;">Data Handling & Capabilities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-center mb-4" style="color: #374c80;">Diverse Data Ingestion Mix</h3>
+                    <p class="text-center text-sm text-gray-600 mb-4">The system is designed to handle a balanced mix of data formats, ensuring no single source of intelligence is overlooked.</p>
+                    <div class="chart-container">
+                        <canvas id="dataTypesChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-center mb-4" style="color: #374c80;">Key Processing Stages</h3>
+                    <p class="text-center text-sm text-gray-600 mb-4">Each data type undergoes a specialized process to extract meaning and convert it into a searchable format for the vector database.</p>
+                     <div class="chart-container">
+                        <canvas id="processingStagesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="features" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" style="color: #003f5c;">Core System Features</h2>
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="text-3xl flex-shrink-0 mt-1" style="color: #7a5195;">💬</div>
+                    <div>
+                        <h3 class="text-xl font-semibold" style="color: #7a5195;">Unified Query Interface</h3>
+                        <p class="text-gray-600 mt-1">A simple, intuitive chat interface allows users to ask questions in natural language. The system understands complex queries and retrieves information from all connected data sources seamlessly.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="text-3xl flex-shrink-0 mt-1" style="color: #ef5675;">🔄</div>
+                    <div>
+                        <h3 class="text-xl font-semibold" style="color: #ef5675;">Semantic & Cross-Modal Search</h3>
+                        <p class="text-gray-600 mt-1">Search extends beyond keywords. Find images based on text descriptions ("show me the report screenshot"), find documents that match an image, or retrieve text related to an audio clip's content.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="text-3xl flex-shrink-0 mt-1" style="color: #ffa600;">🔗</div>
+                    <div>
+                        <h3 class="text-xl font-semibold" style="color: #ffa600;">Citation & Source Transparency</h3>
+                        <p class="text-gray-600 mt-1">Every generated answer is grounded in the source data. Users can easily click on citations to view the original document, image, or audio transcript segment, ensuring full transparency and trust in the results.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 py-6 border-t">
+            <p class="text-gray-600">Developed for the <span class="font-bold" style="color: #003f5c;">National Technical Research Organisation (NTRO)</span></p>
+        </footer>
+    </main>
+
+    <script>
+        function wrapLabel(str, maxWidth) {
+            if (typeof str !== 'string' || str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+        
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+
+        const chartColors = ['#7a5195', '#ef5675', '#ffa600', '#003f5c'];
+
+        const dataTypesCtx = document.getElementById('dataTypesChart').getContext('2d');
+        new Chart(dataTypesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['PDF & DOCX', 'Images & Screenshots', 'Audio Recordings', 'Free-form Notes'],
+                datasets: [{
+                    label: 'Data Volume',
+                    data: [40, 25, 20, 15],
+                    backgroundColor: chartColors,
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                           title: tooltipTitleCallback,
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        const processingStagesCtx = document.getElementById('processingStagesChart').getContext('2d');
+        const rawLabels = ['Text Extraction from Documents', 'Speech-to-Text for Audio', 'Image Content Embedding', 'Unified Vector Indexing'];
+        const wrappedLabels = rawLabels.map(label => wrapLabel(label, 16));
+        
+        new Chart(processingStagesCtx, {
+            type: 'bar',
+            data: {
+                labels: wrappedLabels,
+                datasets: [{
+                    label: 'Processing Priority',
+                    data: [95, 85, 90, 100],
+                    backgroundColor: chartColors,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                         callbacks: {
+                           title: tooltipTitleCallback,
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                        ticks: {
+                           display: false
+                        }
+                    },
+                    y: {
+                         grid: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                        ticks: {
+                           font: {
+                                size: 14
+                           }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

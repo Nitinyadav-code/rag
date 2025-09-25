@@ -1,0 +1,362 @@
+<!-- Chosen Palette: Cool & Professional (Slate, Blue, White) -->
+<!-- Application Structure Plan: A tab-based SPA structure with four main sections: Overview, Pipeline, Features, and Technology. This design was chosen to break down a complex technical solution into digestible, user-navigated segments. The user starts with a high-level summary (Overview), can dive into the technical process (Pipeline), explore the end-user benefits (Features), and review the underlying components (Technology). This non-linear, layered approach is superior to a simple scroll for explaining a multi-faceted system, allowing users to explore at their own pace and focus on areas of interest. -->
+<!-- Visualization & Content Choices: 1. Overview Data Mix: Donut Chart (Chart.js) to inform users about the composition of data types—a quick, universally understood visual for proportions. 2. RAG Pipeline: Interactive Flowchart (HTML/CSS) to organize and explain the core process. Interaction (clicking stages) reveals details on-demand, preventing information overload and promoting engagement. 3. Core Features: Tabbed Mock UI (HTML/CSS/JS) to demonstrate the system's functionality in a concrete, visual way. 4. Tech Stack: Bar Chart (Chart.js) to compare the relative importance or complexity of technology components, offering a clear visual comparison. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard: Multimodal RAG System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        .pipeline-stage {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .pipeline-stage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .feature-tab.active {
+            background-color: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600">NTRO RAG SYSTEM</h1>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#overview" class="nav-link font-semibold text-slate-600 hover:text-blue-600 border-b-2 border-transparent">Overview</a>
+                <a href="#pipeline" class="nav-link font-semibold text-slate-600 hover:text-blue-600 border-b-2 border-transparent">Pipeline</a>
+                <a href="#features" class="nav-link font-semibold text-slate-600 hover:text-blue-600 border-b-2 border-transparent">Features</a>
+                <a href="#tech" class="nav-link font-semibold text-slate-600 hover:text-blue-600 border-b-2 border-transparent">Technology</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="overview" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Unlocking Intelligence from Siloed Data</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-lg text-slate-600">This application details a proposed Retrieval-Augmented Generation (RAG) system designed to solve a critical challenge for NTRO: the inability to search and synthesize intelligence across diverse, unstructured data formats. We'll explore how this system creates a unified framework for seamless analysis.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">The Data Challenge</h3>
+                    <p class="text-slate-600 mb-6">NTRO routinely handles a variety of data types, but traditional tools keep them isolated. Text search can't analyze a screenshot, and image search can't understand a recorded call. This separation hinders comprehensive understanding and leads to missed connections. This RAG system aims to break down these barriers.</p>
+                     <ul class="space-y-3">
+                        <li class="flex items-center"><span class="text-blue-500 mr-3">●</span>Isolated text, image, and audio searches</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-3">●</span>Inefficient manual correlation efforts</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-3">●</span>Lack of context-aware intelligence</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center text-slate-800 mb-4">Typical Data Distribution</h3>
+                    <p class="text-center text-sm text-slate-500 mb-4">The system must be prepared to ingest a heterogeneous mix of file formats, each holding a piece of the larger puzzle.</p>
+                    <div class="chart-container">
+                        <canvas id="dataMixChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pipeline" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">The Multimodal RAG Pipeline</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-lg text-slate-600">The solution is a four-stage pipeline that transforms raw, multimodal data into a queryable, intelligent knowledge base. Click on each stage below to see a detailed explanation of its function and the processes involved.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                 <div class="pipeline-stage cursor-pointer w-full md:w-1/4" data-target="details-ingestion">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-blue-500 h-full">
+                        <div class="text-4xl mb-3">📥</div>
+                        <h3 class="font-bold text-xl text-slate-800">1. Ingestion</h3>
+                        <p class="text-sm text-slate-500 mt-2">The unified entry point for all data types into the system.</p>
+                    </div>
+                </div>
+                <div class="text-2xl text-blue-400 transform rotate-90 md:rotate-0">➔</div>
+                <div class="pipeline-stage cursor-pointer w-full md:w-1/4" data-target="details-processing">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-indigo-500 h-full">
+                        <div class="text-4xl mb-3">⚙️</div>
+                        <h3 class="font-bold text-xl text-slate-800">2. Processing</h3>
+                        <p class="text-sm text-slate-500 mt-2">Extraction and conversion of content into a usable format.</p>
+                    </div>
+                </div>
+                <div class="text-2xl text-blue-400 transform rotate-90 md:rotate-0">➔</div>
+                 <div class="pipeline-stage cursor-pointer w-full md:w-1/4" data-target="details-indexing">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-purple-500 h-full">
+                        <div class="text-4xl mb-3">🗂️</div>
+                        <h3 class="font-bold text-xl text-slate-800">3. Indexing</h3>
+                        <p class="text-sm text-slate-500 mt-2">Storing data representations for semantic retrieval.</p>
+                    </div>
+                </div>
+                <div class="text-2xl text-blue-400 transform rotate-90 md:rotate-0">➔</div>
+                <div class="pipeline-stage cursor-pointer w-full md:w-1/4" data-target="details-retrieval">
+                     <div class="bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-pink-500 h-full">
+                        <div class="text-4xl mb-3">💡</div>
+                        <h3 class="font-bold text-xl text-slate-800">4. Retrieval & Gen</h3>
+                        <p class="text-sm text-slate-500 mt-2">Finding context and generating grounded answers.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="pipeline-details" class="mt-8">
+                <div id="details-ingestion" class="pipeline-detail-content hidden bg-white p-8 rounded-xl shadow-lg border-l-4 border-blue-500">
+                    <h4 class="font-bold text-2xl mb-3">Stage 1: Ingestion Details</h4>
+                    <p class="text-slate-600">This initial stage is responsible for accepting and cataloging raw files. The system provides a flexible interface supporting uploads of various formats. Each file is assigned a unique identifier and its metadata (filename, date, type) is stored for later reference and citation.</p>
+                </div>
+                <div id="details-processing" class="pipeline-detail-content hidden bg-white p-8 rounded-xl shadow-lg border-l-4 border-indigo-500">
+                    <h4 class="font-bold text-2xl mb-3">Stage 2: Processing Details</h4>
+                    <p class="text-slate-600 mb-4">Here, the raw data is transformed into machine-readable content. This involves format-specific sub-processes:</p>
+                     <ul class="list-disc list-inside text-slate-600 space-y-2">
+                        <li><b>DOC/PDF:</b> Textual content is extracted using Optical Character Recognition (OCR) or text parsers.</li>
+                        <li><b>Audio:</b> Recordings are run through a Speech-to-Text (STT) model to generate accurate transcripts.</li>
+                        <li><b>Images:</b> Visual content is processed by an embedding model to create a numerical representation (vector) of its semantic meaning.</li>
+                    </ul>
+                </div>
+                <div id="details-indexing" class="pipeline-detail-content hidden bg-white p-8 rounded-xl shadow-lg border-l-4 border-purple-500">
+                    <h4 class="font-bold text-2xl mb-3">Stage 3: Indexing Details</h4>
+                    <p class="text-slate-600">All processed data—text snippets, transcript segments, and image embeddings—is stored in a shared vector database. This database organizes the data based on semantic similarity, not keywords. It allows the system to find conceptually related items, regardless of their original format. For example, a picture of a bridge can be located near a document describing bridge construction.</p>
+                </div>
+                <div id="details-retrieval" class="pipeline-detail-content hidden bg-white p-8 rounded-xl shadow-lg border-l-4 border-pink-500">
+                    <h4 class="font-bold text-2xl mb-3">Stage 4: Retrieval & Generation Details</h4>
+                    <p class="text-slate-600">When a user submits a query, the Large Language Model (LLM) converts it into an embedding and searches the vector database for the most relevant data chunks (text, images, audio references). This retrieved context is then fed back to the LLM, which uses it to generate a comprehensive, accurate, and grounded summary or answer, complete with citations to the original source files.</p>
+                </div>
+                 <div id="details-default" class="pipeline-detail-content text-center text-slate-500 mt-8">
+                    <p>Click a stage above to learn more about it.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="features" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Core System Features</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-lg text-slate-600">The application is built around three core features designed to provide a powerful and transparent user experience. These features enable natural interaction, cross-format discovery, and trustworthy results. Select a feature to see a demonstration.</p>
+            </div>
+            <div class="flex justify-center mb-8">
+                <div class="flex space-x-2 p-1 bg-slate-200 rounded-lg">
+                    <button class="feature-tab px-4 py-2 font-semibold rounded-md active" data-target="feature-query">Unified Query</button>
+                    <button class="feature-tab px-4 py-2 font-semibold rounded-md" data-target="feature-search">Cross-Modal Search</button>
+                    <button class="feature-tab px-4 py-2 font-semibold rounded-md" data-target="feature-citation">Citation Transparency</button>
+                </div>
+            </div>
+            
+            <div id="feature-content" class="max-w-4xl mx-auto">
+                <div id="feature-query" class="feature-content-panel">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Natural Language Query Interface</h3>
+                        <p class="text-slate-600 mb-6">Users interact with the system through a simple chat or search box. There's no need for complex syntax. Questions can be asked in plain language, and the system's LLM interprets the user's intent to find the most relevant information across all indexed data.</p>
+                        <div class="bg-slate-100 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-slate-500 font-mono text-sm">></span>
+                                <input type="text" value="Show me the report that references the screenshot taken at 14:32" class="w-full bg-transparent border-0 text-slate-700 focus:ring-0" disabled>
+                                <button class="bg-blue-600 text-white px-4 py-1 rounded-md ml-2 text-sm">Query</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="feature-search" class="feature-content-panel hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Semantic & Cross-Modal Search</h3>
+                        <p class="text-slate-600 mb-6">The system connects data semantically. A text query can find images, or an uploaded image can find related documents. This breaks down format barriers and reveals hidden connections between different pieces of intelligence.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-slate-100 p-4 rounded-lg">
+                                <p class="font-semibold text-sm mb-2">Query: "email screenshot"</p>
+                                <p class="font-bold text-blue-600">Result:</p>
+                                <div class="bg-white p-2 mt-2 rounded shadow text-center">🖼️ screenshot_1432.png</div>
+                                <div class="bg-white p-2 mt-2 rounded shadow text-sm">"...as shown in the attached screenshot, the server..." - report_2024.pdf</div>
+                            </div>
+                             <div class="bg-slate-100 p-4 rounded-lg">
+                                <p class="font-semibold text-sm mb-2">Query: [Upload: 🖼️ chart.png]</p>
+                                <p class="font-bold text-blue-600">Result:</p>
+                                <div class="bg-white p-2 mt-2 rounded shadow text-sm">"...the quarterly performance chart indicates a significant..." - transcript_q3_call.txt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="feature-citation" class="feature-content-panel hidden">
+                     <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Source Navigation & Transparency</h3>
+                        <p class="text-slate-600 mb-6">Trust is paramount. Every answer generated by the system includes numbered citations that link directly back to the source files. Users can instantly verify information and explore the original context, ensuring full transparency and confidence in the results.</p>
+                        <div class="bg-slate-100 p-4 rounded-lg">
+                            <p class="text-slate-700">The international development report for 2024 highlights significant growth in sector A <a href="#" class="text-blue-600 font-bold">[1]</a>. This is corroborated by data shown in the screenshot from 14:32 <a href="#" class="text-blue-600 font-bold">[2]</a>, which was also discussed in the weekly sync call <a href="#" class="text-blue-600 font-bold">[3]</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tech" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Enabling Technologies</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-lg text-slate-600">This solution is made possible by integrating several key technologies. The chart below shows the core components that power the RAG system, from language understanding to data storage and retrieval.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                 <div class="chart-container mx-auto h-[450px] max-h-[500px]">
+                    <canvas id="techStackChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 mt-8 border-t border-slate-200">
+        <p class="text-slate-500">A conceptual dashboard for the National Technical Research Organisation (NTRO)</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapLabel = (str, maxWidth) => {
+                if (typeof str !== 'string' || str.length <= maxWidth) return str;
+                const words = str.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > maxWidth) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                return Array.isArray(label) ? label.join(' ') : label;
+            };
+            
+            const commonTooltipOptions = {
+                plugins: { tooltip: { callbacks: { title: tooltipTitleCallback } } }
+            };
+
+            const dataMixCtx = document.getElementById('dataMixChart').getContext('2d');
+            new Chart(dataMixCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['DOC/PDF Files', 'Images/Screenshots', 'Audio Recordings', 'Misc Notes'],
+                    datasets: [{
+                        label: 'Data Volume',
+                        data: [45, 25, 20, 10],
+                        backgroundColor: ['#2563eb', '#4f46e5', '#7c3aed', '#9333ea'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...commonTooltipOptions,
+                    cutout: '70%',
+                    plugins: {
+                        ...commonTooltipOptions.plugins,
+                        legend: { position: 'bottom', labels: { padding: 20 } },
+                    }
+                }
+            });
+
+            const techStackCtx = document.getElementById('techStackChart').getContext('2d');
+            const techLabelsRaw = ['Large Language Models (LLMs)', 'Vector Database', 'Speech-to-Text (STT) Models', 'Embedding Models', 'Text Extractors (OCR/Parsers)'];
+            const techLabelsWrapped = techLabelsRaw.map(l => wrapLabel(l, 16));
+            new Chart(techStackCtx, {
+                type: 'bar',
+                data: {
+                    labels: techLabelsWrapped,
+                    datasets: [{
+                        label: 'Component Importance',
+                        data: [100, 95, 80, 90, 75],
+                        backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
+                        borderRadius: 5,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...commonTooltipOptions,
+                    plugins: {
+                        ...commonTooltipOptions.plugins,
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { display: false, beginAtZero: true },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            const pipelineStages = document.querySelectorAll('.pipeline-stage');
+            const detailContents = document.querySelectorAll('.pipeline-detail-content');
+            const defaultDetail = document.getElementById('details-default');
+
+            pipelineStages.forEach(stage => {
+                stage.addEventListener('click', () => {
+                    const targetId = stage.dataset.target;
+                    detailContents.forEach(content => content.classList.add('hidden'));
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            const featureTabs = document.querySelectorAll('.feature-tab');
+            const featurePanels = document.querySelectorAll('.feature-content-panel');
+            
+            featureTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    featureTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const targetId = tab.dataset.target;
+                    featurePanels.forEach(panel => {
+                        panel.id === targetId ? panel.classList.remove('hidden') : panel.classList.add('hidden');
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+            sections.forEach(sec => observer.observe(sec));
+        });
+    </script>
+</body>
+</html>

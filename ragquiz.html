@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal RAG System Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .answer-option {
+            background-color: #e5e7eb;
+            color: #4b5563;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .answer-option:hover {
+            background-color: #d1d5db;
+        }
+        .answer-option.correct {
+            background-color: #10b981;
+            color: white;
+            font-weight: 600;
+        }
+        .answer-option.incorrect {
+            background-color: #ef4444;
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="quiz-container">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Multimodal RAG System Quiz</h1>
+        <div id="quiz-page">
+            <div id="question-area" class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <p id="question-number" class="text-gray-500 font-medium"></p>
+                    <p id="score-display" class="text-gray-500 font-medium"></p>
+                </div>
+                <p id="question-text" class="text-lg font-semibold text-gray-700"></p>
+            </div>
+            
+            <div id="answer-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+            
+            <div id="feedback-area" class="hidden">
+                <div id="rationale-text" class="mb-4 p-4 rounded-md bg-gray-100 text-gray-700"></div>
+                <button id="next-button" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Next Question</button>
+            </div>
+            
+            <button id="hint-button" class="w-full mt-4 bg-gray-200 text-gray-700 font-bold py-2 rounded-md hover:bg-gray-300 transition">Hint</button>
+            <div id="hint-text" class="hidden mt-2 p-2 text-sm text-gray-600 border-l-4 border-yellow-400 bg-yellow-50"></div>
+        </div>
+
+        <div id="result-page" class="hidden text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Quiz Complete!</h2>
+            <p id="final-score" class="text-xl mb-6 text-gray-700"></p>
+            <button id="restart-button" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = {
+            "questions": [
+                {
+                    "questionNumber": 1,
+                    "question": "What is the primary problem the described Multimodal RAG system is designed to solve?",
+                    "answerOptions": [
+                        {
+                            "text": "Slow data processing speeds for large text files.",
+                            "rationale": "While the system is efficient, its main goal is not just about speed for one data type but about unifying different types.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "Inability to search across diverse, isolated data formats like documents, images, and audio.",
+                            "rationale": "The core challenge addressed is the creation of information 'silos' where different data formats cannot be searched together semantically.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "Lack of sufficient storage for different types of media.",
+                            "rationale": "The problem is related to accessing and understanding data, not the physical capacity to store it.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "The high cost of Large Language Model (LLM) APIs.",
+                            "rationale": "While cost is a consideration in any system, the primary driver for this RAG architecture is functionality, not cost reduction.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "Think about why traditional search tools struggle with the variety of data mentioned in the problem description."
+                },
+                {
+                    "questionNumber": 2,
+                    "question": "In the RAG system's pipeline, what happens during the 'Ingestion' stage?",
+                    "answerOptions": [
+                        {
+                            "text": "All data is converted into a single text format.",
+                            "rationale": "Data conversion and content extraction happen in the next stage, 'Processing'.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "It serves as the unified entry point for various data types like DOCX, PDF, and audio files.",
+                            "rationale": "This stage is the system's front door, responsible for accepting and cataloging the raw, multimodal files.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "Vector embeddings are generated for all incoming data.",
+                            "rationale": "Generating embeddings is a key part of the 'Processing' and 'Indexing' stages, not Ingestion.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "User queries are answered using a large language model.",
+                            "rationale": "Answering queries is the final output of the 'Retrieval & Generation' stage.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "This is the very first step when data enters the system, before any content is analyzed."
+                },
+                {
+                    "questionNumber": 3,
+                    "question": "What specific process is applied to audio files during the 'Processing' stage to make their content understandable to the system?",
+                    "answerOptions": [
+                        {
+                            "text": "They are converted into vector embeddings directly from the audio waves.",
+                            "rationale": "While possible in some models, this system's pipeline specifies an intermediate step to create a text-based representation first.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "They are transcribed into text using Speech-to-Text (STT) technology.",
+                            "rationale": "To make the spoken content searchable and relatable to text documents, it must first be converted into a written transcript.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "Their metadata, such as file length and creation date, is extracted.",
+                            "rationale": "Metadata is useful, but the core task of this stage is to process the actual content of the audio.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "They are compressed using a lossless algorithm to save space.",
+                            "rationale": "File compression is a storage optimization, not a step toward understanding the semantic content of the audio.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "How does a machine read the contents of a voice recording?"
+                },
+                {
+                    "questionNumber": 4,
+                    "question": "How does the 'Indexing' stage organize different data types for seamless semantic retrieval?",
+                    "answerOptions": [
+                        {
+                            "text": "By storing files in folders based on their original format (e.g., PDF, DOCX).",
+                            "rationale": "This describes a traditional file system, which cannot perform semantic or cross-modal searches.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "By creating a keyword-based index for all textual content.",
+                            "rationale": "The system goes beyond simple keywords to understand the underlying meaning or semantics.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "By storing embeddings of all modalities in a shared vector space.",
+                            "rationale": "This is the key concept; numerical representations (vectors) of all data types are indexed together based on meaning.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "By converting all data into a single, large JSON file.",
+                            "rationale": "This method would be highly inefficient and wouldn't facilitate the fast, semantic retrieval the system requires.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "This stage uses a special kind of database that understands conceptual relationships, not just exact words."
+                },
+                {
+                    "questionNumber": 5,
+                    "question": "Which of the following queries is the best example of 'Cross-Modal Search'?",
+                    "answerOptions": [
+                        {
+                            "text": "Finding a specific sentence inside a single PDF document.",
+                            "rationale": "This is a standard text search within a single modality (text-in-text).",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "Using a text query like \"show the report that references the screenshot\" to find an image file.",
+                            "rationale": "This demonstrates using one modality (text) to find an item of a different modality (image).",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "Filtering all search results to only show files created last week.",
+                            "rationale": "This is filtering based on metadata, not searching across different content types.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "Finding all audio files that are longer than five minutes.",
+                            "rationale": "This is also a metadata-based filter, not a search based on the semantic content of different media types.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "This feature allows one type of data (e.g., text) to find a different type of data (e.g., an image)."
+                },
+                {
+                    "questionNumber": 6,
+                    "question": "What is the primary role of the Large Language Model (LLM) in the final 'Retrieval & Generation' stage?",
+                    "answerOptions": [
+                        {
+                            "text": "To store the vector embeddings of all the data.",
+                            "rationale": "Storage of vector embeddings is the function of the vector database, not the LLM.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "To perform Speech-to-Text conversion on audio files.",
+                            "rationale": "Speech-to-Text is a specialized model used earlier in the 'Processing' stage.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "To synthesize retrieved context into a grounded, human-like answer.",
+                            "rationale": "The LLM's key function is to take the relevant pieces of retrieved data and compose them into a coherent and accurate response.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "To extract text from PDF and DOCX files.",
+                            "rationale": "Text extraction and parsing are handled by specialized tools in the 'Processing' stage.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "This component acts as the 'brain' that understands the user's question and composes the final answer using the retrieved evidence."
+                },
+                {
+                    "questionNumber": 7,
+                    "question": "Why is 'Citation Transparency' a critical feature of the proposed RAG system?",
+                    "answerOptions": [
+                        {
+                            "text": "It improves the visual design of the user interface.",
+                            "rationale": "While good UI is important, the purpose of citations is functional, focusing on trust and verifiability.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "It allows users to verify information and trust the results by linking back to the original source files.",
+                            "rationale": "This feature ensures that the system's outputs are auditable and grounded in real data, which is crucial for building user trust.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "It is a legal requirement for all AI systems.",
+                            "rationale": "While transparency is a good practice, it is not a universal legal mandate for all AI systems in this specific way.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "It reduces the load on the Large Language Model.",
+                            "rationale": "Providing citations does not inherently reduce the computational load on the LLM during generation.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "This feature ensures that users can see the 'proof' behind the system's answers."
+                },
+                {
+                    "questionNumber": 8,
+                    "question": "To make an image semantically searchable, what is the key output of the 'Processing' stage for that image?",
+                    "answerOptions": [
+                        {
+                            "text": "A textual description of the image generated by Optical Character Recognition (OCR).",
+                            "rationale": "OCR only extracts text from an image; it doesn't capture the overall visual meaning, such as objects or scenes.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "A compressed JPEG file to save storage space.",
+                            "rationale": "Compression is for storage efficiency and does not help in making the image's content searchable.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "A numerical representation (vector embedding) of its visual content.",
+                            "rationale": "This vector captures the image's semantic essence, allowing it to be compared with other data types in the vector space.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "A list of keywords based on its file name.",
+                            "rationale": "Relying on file names is unreliable and is not a semantic understanding of the image's content.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "The system needs to understand the 'meaning' of the image, not just the text it might contain or its file name."
+                },
+                {
+                    "questionNumber": 9,
+                    "question": "What is the ultimate organizational benefit of implementing this multimodal RAG system?",
+                    "answerOptions": [
+                        {
+                            "text": "To create a fully automated system that replaces human analysts.",
+                            "rationale": "The goal of RAG is to augment human capabilities by providing better tools, not to replace the analysts who use them.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "To create a secure, long-term backup of all organizational data.",
+                            "rationale": "While the system ingests data, its primary purpose is active intelligence retrieval, not passive archival or backup.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "To enhance accuracy and reduce the time needed to synthesize intelligence from diverse sources.",
+                            "rationale": "This captures the core value proposition: making it faster, easier, and more effective to connect dots across all available data.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "To standardize all company documents into a single format.",
+                            "rationale": "The system's strength is its ability to handle diverse formats, not to force them into a single standard.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "Think about the impact on the efficiency and quality of work for the people using the system."
+                },
+                {
+                    "questionNumber": 10,
+                    "question": "What kind of interface does the system use for users to ask questions?",
+                    "answerOptions": [
+                        {
+                            "text": "A complex dashboard with multiple filters and dropdown menus.",
+                            "rationale": "The design emphasizes simplicity and moving away from complex, structured query-building.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "A simple chat or search box for natural language queries.",
+                            "rationale": "This approach is user-friendly and powerful, as it leverages the LLM's ability to understand plain language.",
+                            "isCorrect": true
+                        },
+                        {
+                            "text": "An API endpoint that requires structured code to submit queries.",
+                            "rationale": "While an API might exist for other systems to connect, the primary human interface is described as a simple search box.",
+                            "isCorrect": false
+                        },
+                        {
+                            "text": "A file upload system where the query is contained in a text file.",
+                            "rationale": "The system is designed for direct, interactive querying, not for batch processing of questions from files.",
+                            "isCorrect": false
+                        }
+                    ],
+                    "hint": "The description emphasizes a user-friendly and intuitive method of interaction."
+                }
+            ]
+        };
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questionOrder = [];
+
+        const quizPage = document.getElementById('quiz-page');
+        const resultPage = document.getElementById('result-page');
+        const questionNumberElem = document.getElementById('question-number');
+        const scoreDisplayElem = document.getElementById('score-display');
+        const questionTextElem = document.getElementById('question-text');
+        const answerOptionsElem = document.getElementById('answer-options');
+        const feedbackArea = document.getElementById('feedback-area');
+        const rationaleTextElem = document.getElementById('rationale-text');
+        const nextButton = document.getElementById('next-button');
+        const hintButton = document.getElementById('hint-button');
+        const hintTextElem = document.getElementById('hint-text');
+        const finalScoreElem = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            questionOrder = shuffleArray(Array.from({length: quizData.questions.length}, (_, i) => i));
+            quizPage.classList.remove('hidden');
+            resultPage.classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            const currentQuestion = quizData.questions[questionIndex];
+            
+            questionNumberElem.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.questions.length}`;
+            scoreDisplayElem.textContent = `Score: ${score}`;
+            questionTextElem.textContent = currentQuestion.question;
+            answerOptionsElem.innerHTML = '';
+            feedbackArea.classList.add('hidden');
+            hintTextElem.classList.add('hidden');
+            hintButton.classList.remove('hidden');
+
+            const shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            shuffledOptions.forEach(option => {
+                const optionButton = document.createElement('button');
+                optionButton.textContent = option.text;
+                optionButton.classList.add('answer-option', 'py-3', 'px-4', 'font-medium', 'text-left', 'transition-colors');
+                optionButton.addEventListener('click', () => handleAnswerClick(option));
+                answerOptionsElem.appendChild(optionButton);
+            });
+        }
+
+        function handleAnswerClick(selectedOption) {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            const currentQuestion = quizData.questions[questionIndex];
+
+            const options = answerOptionsElem.querySelectorAll('.answer-option');
+            options.forEach(option => option.disabled = true);
+            
+            feedbackArea.classList.remove('hidden');
+            hintButton.classList.add('hidden');
+            rationaleTextElem.textContent = selectedOption.rationale;
+            
+            let isCorrect = selectedOption.isCorrect;
+            if (isCorrect) {
+                score++;
+            }
+
+            options.forEach(option => {
+                const optionText = option.textContent;
+                const correspondingOption = currentQuestion.answerOptions.find(opt => opt.text === optionText);
+                if (correspondingOption.isCorrect) {
+                    option.classList.add('correct');
+                } else if (optionText === selectedOption.text) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        function showResult() {
+            quizPage.classList.add('hidden');
+            resultPage.classList.remove('hidden');
+            finalScoreElem.textContent = `You scored ${score} out of ${quizData.questions.length}!`;
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        restartButton.addEventListener('click', initQuiz);
+        
+        hintButton.addEventListener('click', () => {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            const currentQuestion = quizData.questions[questionIndex];
+            hintTextElem.textContent = currentQuestion.hint;
+            hintTextElem.classList.remove('hidden');
+        });
+
+        initQuiz();
+
+    </script>
+</body>
+</html>
